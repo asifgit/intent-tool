@@ -1,0 +1,22 @@
+{% if use_management_hosts %}
+    management_hosts:
+      type: tosca.nodes.Network
+      properties:
+        must-exist: true
+        name: management_hosts
+{% endif %}
+
+### Service Class
+
+# OAI %NODENAME% Service, generated service instance: %NODENAME%
+    service#%nodename%:
+      type: tosca.nodes.VBBUService
+      properties:
+        name: VBBUService
+        view_url: /admin/%nodename%/%nodename%/$id$/
+        kind: %nodename%
+        public_key: {{ lookup('file', config_cord_profile_dir + '/key_import/mcord_rsa.pub') }}
+        private_key_fn: /opt/xos/services/%nodename%/keys/mcord_rsa
+      artifacts:
+        pubkey: /opt/cord_profile/key_import/mcord_rsa.pub
+

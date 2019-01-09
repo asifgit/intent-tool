@@ -1,0 +1,9 @@
+    service#addressmanager:
+      type: tosca.nodes.AddressManagerService
+      requirements:
+        - addresses_public:
+            node: addresses_public
+            relationship: tosca.relationships.ProvidesAddresses
+        - addresses_%nodename%:
+            node: addresses_%nodename%
+            relationship: tosca.relationships.ProvidesAddresses

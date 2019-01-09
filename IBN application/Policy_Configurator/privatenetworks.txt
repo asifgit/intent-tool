@@ -1,0 +1,73 @@
+    vRouter_ONOS_app:
+      type: tosca.nodes.ONOSvRouterApp
+      requirements:
+        - onos_tenant:
+            node: service#ONOS_Fabric
+            relationship: tosca.relationships.TenantOfService
+        - vrouter_service:
+            node: service#vrouter
+            relationship: tosca.relationships.UsedByService
+      properties:
+        dependencies: org.onosproject.fpm
+        autogenerate: vrouter-network-cfg
+
+    in#lanside:
+      type: tosca.nodes.InterfaceType
+      properties:
+         direction: in
+
+    out#lanside:
+      type: tosca.nodes.InterfaceType
+      properties:
+         direction: out
+
+    in#wanside:
+      type: tosca.nodes.InterfaceType
+      properties:
+         direction: in
+
+    out#wanside:
+      type: tosca.nodes.InterfaceType
+      properties:
+         direction: out
+
+    addressmanager_wanside:
+      type: tosca.nodes.ServiceInterface
+      requirements:
+        - service:
+            node: service#addressmanager
+            relationship: tosca.relationships.MemberOfService
+        - interface:
+            node: in#wanside
+            relationship: tosca.relationships.IsType
+{#
+# Define Private Network Template
+    private_network_template:
+      type: tosca.nodes.NetworkTemplate
+      properties:
+          visibility: private
+          translation: none
+          vtn_kind: PRIVATE
+
+# Define Public Network Template
+    public_network_template:
+      type: tosca.nodes.NetworkTemplate
+      properties:
+          visibility: public
+          translation: none
+          vtn_kind: PUBLIC
+
+# %NODENAME% Private Network
+    %nodename%_network:
+      type: tosca.nodes.network.Network
+      properties:
+          ip_version: 4
+          cidr: 10.0.5.0/24
+      requirements:
+          - network_template:
+              node: private_network_template
+              relationship: tosca.relationships.UsesNetworkTemplate
+          - owner:
+              node: {{ site_name }}_%nodename%
+              relationship: tosca.relationships.MemberOfSlice
+

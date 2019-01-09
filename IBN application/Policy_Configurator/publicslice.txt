@@ -1,0 +1,12 @@
+# Public network for SPGWU and the other ones are for internal tests
+
+    vspgwu_public_network:
+      type: tosca.nodes.NetworkSlice
+      requirements:
+        - network:
+            node: public
+            relationship: tosca.relationships.BelongsToOne
+        - slice:
+            node: {{ site_name }}_vspgwu
+            relationship: tosca.relationships.BelongsToOne
+

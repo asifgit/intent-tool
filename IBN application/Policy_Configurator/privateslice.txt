@@ -1,0 +1,11 @@
+# %NODENAME% private network Slice
+    %nodename%_network_slice:
+      type: tosca.nodes.NetworkSlice
+      requirements:
+        - network:
+            node: %nodename%_network
+            relationship: tosca.relationships.BelongsToOne
+        - slice:
+            node: {{ site_name }}_%nodename%
+            relationship: tosca.relationships.BelongsToOne
+

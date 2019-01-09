@@ -1,0 +1,10 @@
+
+topology_template:
+  node_templates:
+
+    # Service %NODENAME%
+    service#%nodename%:
+      type: tosca.nodes.%NODENAME%Service
+      properties:
+        name: %NODENAME%Service
+ 

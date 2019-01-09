@@ -1,0 +1,21 @@
+
+    service#vrouter:
+      type: tosca.nodes.VRouterService
+      properties:
+        view_url: /admin/vrouter/vrouterservice/$id$/
+        replaces: service_vrouter
+
+    addresses_public:
+      type: tosca.nodes.AddressPool
+      properties:
+        addresses: 10.8.1.0/24
+        gateway_ip: 10.8.1.1
+        gateway_mac: a4:23:05:06:01:01
+
+    addresses_%nodename%:
+      type: tosca.nodes.AddressPool
+      properties:
+        addresses: 10.0.5.0/24
+        gateway_ip: 10.0.5.1
+        gateway_mac: aa:bb:cc:dd:ee:05
+

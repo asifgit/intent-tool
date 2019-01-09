@@ -1,0 +1,37 @@
+### Service Slice
+
+# OAI %NODENAME% Service slice, Use image-oaisim as default image
+    {{ site_name }}_%nodename%:
+      description: %NODENAME% Service Slice
+      type: tosca.nodes.Slice
+      properties:
+          name: {{ site_name }}_%nodename%1
+          default_isolation: vm
+          network: noauto
+      requirements:
+          - site:
+              node: {{ site_name }}
+              relationship: tosca.relationships.BelongsToOne
+          - service:
+              node: service#%nodename%
+              relationship: tosca.relationships.BelongsToOne
+          - default_image:
+              node: image-oaisim
+              relationship: tosca.relationships.BelongsToOne
+          - default_flavor:
+              node: m1.medium
+              relationship: tosca.relationships.BelongsToOne
+
+# OAI %NODENAME% Vendor
+    oai_%nodename%:
+      type: tosca.nodes.VBBUVendor
+      properties:
+        name: oai_%nodename%
+      requirements:
+        - image:
+            node: image-oaisim
+            relationship: tosca.relationships.BelongsToOne
+        - flavor:
+            node: m1.medium
+            relationship: tosca.relationships.BelongsToOne
+

@@ -1,0 +1,104 @@
+
+
+topology_template:
+  node_templates:
+
+# site, image, fully created in deployment.yaml
+
+    {{ site_name }}:
+      type: tosca.nodes.Site
+      properties:
+        must-exist: true
+        name: {{ site_name }}
+
+# Define service instance flavor size
+
+    m1.small:
+      type: tosca.nodes.Flavor
+      properties:
+        name: m1.small
+        must-exist: true
+
+    m1.medium:
+      type: tosca.nodes.Flavor
+      properties:
+        name: m1.medium
+        must-exist: true
+
+    m1.large:
+      type: tosca.nodes.Flavor
+      properties:
+        name: m1.large
+        must-exist: true
+
+    m1.xlarge:
+      type: tosca.nodes.Flavor
+      properties:
+        name: m1.xlarge
+        must-exist: true
+
+ # Define image
+    trusty-server-multi-nic:
+      type: tosca.nodes.Image
+      properties:
+        name: trusty-server-multi-nic
+
+ # OAI custom image
+    image-oai:
+      type: tosca.nodes.Image
+      properties:
+        name: image-oai
+
+ # OAI custom image
+    image-oaisim:
+      type: tosca.nodes.Image
+      properties:
+        name: image-oaisim
+
+# management networks, fully created in management-net.yaml
+    management:
+      type: tosca.nodes.Network
+      properties:
+        must-exist: true
+        name: management
+
+# public network, fully created in public-net.yaml
+    public:
+      type: tosca.nodes.Network
+      properties:
+        must-exist: true
+        name: public
+
+# Network template
+    private_network_template:
+      type: tosca.nodes.NetworkTemplate
+      properties:
+          name: private_network_template
+          visibility: private
+          access: indirect
+          translation: none
+          vtn_kind: PRIVATE
+
+# Define Public Network Template
+    public_network_template:
+      type: tosca.nodes.NetworkTemplate
+      properties:
+          name: public_network_template
+          visibility: public
+          translation: none
+          vtn_kind: PUBLIC
+
+# enb, mme, nssf, hss, spgw network, nssf fully created in oai-net.yaml
+    %nodename%_network:
+      type: tosca.nodes.Network
+      properties:
+        subnet: 10.0.5.0/24
+        name: %nodename%_network
+      requirements:
+          - template:
+              node: private_network_template
+              relationship: tosca.relationships.BelongsToOne
+          - owner:
+              node: {{ site_name }}_%nodename%
+              relationship: tosca.relationships.BelongsToOne
+

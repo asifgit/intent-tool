@@ -1,0 +1,13 @@
+    # Service dependency from %NODENAME% to %NODENAME%+1
+    mcord_%nodename%_%nodename%+1:
+      type: tosca.nodes.ServiceDependency
+      properties:
+        connect_method: None
+      requirements:
+        - subscriber_service:
+            node: service#%nodename%
+            relationship: tosca.relationships.BelongsToOne
+        - provider_service:
+            node: service#%nodename%+1
+            relationship: tosca.relationships.BelongsToOne
+

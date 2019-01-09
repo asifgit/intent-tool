@@ -1,0 +1,11 @@
+# Management network slice
+    %nodename%_management_network:
+      type: tosca.nodes.NetworkSlice
+      requirements:
+        - network:
+            node: management
+            relationship: tosca.relationships.BelongsToOne
+        - slice:
+            node: {{ site_name }}_%nodename%
+            relationship: tosca.relationships.BelongsToOne
+

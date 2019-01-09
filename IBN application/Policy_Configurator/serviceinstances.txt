@@ -1,0 +1,13 @@
+# OAI Service instances
+    serviceinstance#%NODENAME%_instance:
+      type: tosca.nodes.%NODENAME%Tenant
+      properties:
+        name: %nodename%1
+      requirements:
+        - vbbu_vendor:
+            node: oai_%nodename%
+            relationship: tosca.relationships.BelongsToOne
+        - owner:
+            node: service#%nodename%
+            relationship: tosca.relationships.BelongsToOne
+
