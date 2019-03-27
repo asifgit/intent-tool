@@ -22,13 +22,6 @@
 	<body class="bg-light">
 		<?php
 
-			/*echo $_POST["name"] . "<br>";
-			echo $_POST["architecture"] . "<br>";
-			echo $_POST["snssai"] . "<br>";
-			echo $_POST["unit"] . "<br>";
-			echo $_POST["uprate"] . "<br>";
-			echo $_POST["downrate"] . "<br>";*/
-
 			$servername = "127.0.0.1";
             $username = "root";
             $password = "";
@@ -47,8 +40,12 @@
 				/*$snssai			= $_POST["snssai"];*/
 				$snssai			= $_POST["snssai"];
 				$unit			= 'MB';//$_POST["unit"];
-				/*$uprate			= $_POST["uprate"];
-				$downrate		= $_POST["downrate"];*/
+				$isCustom		= $_POST["cSnssai"];
+				$cUprate		= $_POST["cUprate"];
+				$cDownrate		= $_POST["cDownrate"];
+
+				$loopQueryOk = true;
+				$customQueryOk = true;
 
 				if(isset($_POST['snssai'])){
 					if (is_array($_POST['snssai'])) {
@@ -65,8 +62,9 @@
 
 			              	if ($result === TRUE) {
 							    //echo "New record created successfully";
-							    header('Location: index.php');
+							    $loopQueryOk = true;
 							} else{
+								$loopQueryOk = false;
 								echo	'<div class="container">'
 							    	.		'<div class="row">' 
 							    	.			'<div class="col-md-10 offset-1">'
@@ -91,9 +89,48 @@
 						// do nothing
 					}
 				}
+				if($isCustom == 'on'){
+					$customTxt = "";
+					$sqlCustom =	"INSERT INTO `xontracts` " 
+	            		.		"(`name`, `arch_id`, `s_nssai`, `uprate`, `downrate`, `unit`) " 
+	            		.	"VALUES " 
+	            		.		"('".$name.$customTxt."','".$architecture."','127','".$cUprate."','".$cDownrate."','".$unit."')";
+	            	$resultCustom = $conn->query($sqlCustom);
+
+	              	if ($resultCustom === TRUE) {
+					    //echo "New record created successfully";
+					    $customQueryOk = true;
+					} else{
+						$customQueryOk = false;
+						echo	'<div class="container">'
+					    	.		'<div class="row">' 
+					    	.			'<div class="col-md-10 offset-1">'
+					    	.				'<div class="alert alert-danger" role="alert" style="margin-top: 100px;">'
+							.					'<h4 class="alert-heading"><i class="fa fa-exclamation-circle"></i> Error</h4>'
+							.					'<ul><li>' 
+							.						$conn->error
+							.					'</li></ul>'
+							.					'<hr>'
+							.					'<p class="mb-0">' 
+							.						'<ul><a href="index.php" class="alert-link">' 
+							.							'<i class="fa fa-arrow-circle-left"></i> Go back' 
+							.						'</a></ul>' 
+							.					'</p>'
+							.				'</div>'
+							.			'</div>'
+							.		'</div>'
+							.	'</div>';
+					}
+
+				}
 
             	$conn->close();
 
+            	if($loopQueryOk && $customQueryOk){
+            		header('Location: index.php');
+            	} else{
+            		// do nothing
+            	}
             	
             }
 

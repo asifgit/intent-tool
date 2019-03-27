@@ -88,7 +88,7 @@
                         echo  '<tr>'
                           .     '<th scope="row">' . ++$ijk . '</th>'
                           .     '<td class="text-left">' . $row['name'] . '</td>'
-                          .     '<td>' . $row['s_nssai'] . '</td>'
+                          .     '<td>' . (($row['s_nssai']==127)?"Custom":$row['s_nssai']) . '</td>'
                           .     '<td>' . $row['uprate'] . '</td>'
                           .     '<td>' . $row['downrate'] . '</td>'
                           .     '<td><a class="badge badge-light" href="graph.php?id=' . $row['id'] . '">graph</a></td>'

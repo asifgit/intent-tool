@@ -72,6 +72,11 @@
                 while($row = $result1->fetch_assoc()) {
                   echo  '<h4 class="d-flex justify-content-between align-items-center mb-3">' 
                     .     '<span class="text-muted">Contracts</span>' 
+                    .     '<span class="text-muted" title="Sync all contracts">' 
+                    .       '<form action="sync_contracts.php">'
+                    .         '<button class="btn fa fa-refresh fa-md text-muted" ></button>' 
+                    .       '</form>'
+                    .     '</span>'
                     .     '<span class="badge badge-info badge-pill">' . $row['number_of_contracts'] . '</span>'
                     .   '</h4>';
                 }
@@ -98,7 +103,7 @@
                         .     '<div>'
                         .       '<h6 class="my-0"><a href="graph.php?id=' . $row['id'] . '">' . $row['name'] . ' (' . $row['architecture_name'] . ')</a></h6>' 
                         .       '<small class="text-muted">' 
-                        .         's-nssai:' . $row['s_nssai'] 
+                        .         'QoS:' . (($row['s_nssai']==127)?"Custom":$row['s_nssai'])
                         .         ', uprate:' . $row['uprate'] 
                         .         ', downrate:' . $row['downrate'] 
                         .       '</small>' 
@@ -177,8 +182,6 @@
                   Please select an architecture.
                 </div>
               </div>
-              <div class="col-12 mb-3">
-                <label for="snssai">S-NSSAI(s) <span style="font-size: 13px;">(uprates/downrates in MBs)</span></label><br>
                 <?php
 
                   $servername = "127.0.0.1";
@@ -201,6 +204,10 @@
 
                     if ($result4->num_rows > 0) {
                         // output data of each row
+                      echo  '<div class="col-12 mb-3">'
+                        .     '<label for="snssai">QoS Network Slices '
+                        .       '<span style="font-size: 13px;">(uprates/downrates in MBs)</span>'
+                        .     '</label><br>';
                         while($row = $result4->fetch_assoc()) {
                             $checkedVal = ($row['snssai']==1?'checked="true" ':'');
                             echo  '<div class="col-md-6 custom-control custom-control-inline custom-checkbox snssaiChkBx" style="margin: 0px; max-width: 48%;"> '
@@ -212,12 +219,34 @@
                                 .   '</label> '
                                 . '</div>';
                         }
+                      echo  '</div>';
                     }
+
+                    echo  '<div class="col-12 mb-3" style="margin-bottom: 0.2rem !important;">'
+                    .       '<div class="col-md-6 custom-control custom-control-inline custom-checkbox customSnssaiChkBx" style="margin: 0px; max-width: 48%;"> '
+                    .         '<input class="custom-control-input" type="checkbox" id="cSnssai" name="cSnssai" /> '
+                    .         '<label class="custom-control-label" for="cSnssai">' 
+                    .           'Custom QoS Network Slice' 
+                    .         '</label> '
+                    .       '</div>'
+                    .     '</div>';
+
+                    echo  '<div style="height:50px;"><div class="col-12 mb-3" id="customSliceDiv" style="display: none;">'
+                    .       '<div class="form-group row">'
+                    .         '<label for="cUprate" class="col-md-2" style="margin:0.3rem 0 0.3rem 0;" >'
+                    .           'Uprate:'
+                    .         '</label>'
+                    .        '<input type="number" min="1" max="100" value="5" class="form-control col-md-4" id="cUprate" name="cUprate" placeholder="custom uprate">'
+                    .         '<label for="cDownrate" class="col-md-2" style="margin:0.3rem 0 0.3rem 0;" >'
+                    .           'Downrate:'
+                    .         '</label>'
+                    .        '<input type="number" min="1" max="100" value="10" class="form-control col-md-4" id="cDownrate" name="cDownrate" placeholder="custom downrate">'
+                    .       '</div>'
+                    .     '</div></div>';
                     
                     $conn->close();
                   }
                 ?>
-              </div>
               <!-- <div class="col-md-2 mb-3">
                 <label>Unit</label>
                 <div class="custom-control custom-radio">
@@ -310,8 +339,29 @@
                 requiredCheckboxes.attr('required', 'required');
             }
         });
-    });
+      });
 
+      $('#cSnssai').click(function(){
+        toggleCustomSnssai();
+      });
+
+      function toggleCustomSnssai(){
+        if($('#cSnssai').is(':checked')){
+          $('#customSliceDiv').show();
+        } else{
+          $('#customSliceDiv').hide();
+        }
+      }
+
+      function replaceCustomQoSWithText(){
+        /*var replaced = $("body").html().replace('QoS:127','QoS:C');
+        $("body").html(replaced);*/
+      }
+
+      $("body").ready(function(){
+        replaceCustomQoSWithText();
+        toggleCustomSnssai();
+      });
 
     </script>
   
