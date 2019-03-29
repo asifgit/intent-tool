@@ -44,7 +44,14 @@
 
       <div class="row py-5 text-center">
         <table class="table table-hover table-striped">
-          <caption>Contracts list</caption>
+          <caption>
+            Contracts list
+            <span class="pull-right" style="margin-right: 33px;">
+              <a class="badge badge-dark" href="delete_graph.php?id=0&name=DeleteAll">
+                delete-all
+              </a>
+            </span>
+          </caption>
           <thead class="thead-dark">
             <tr>
               <th scope="col">#</th>
@@ -92,7 +99,9 @@
                           .     '<td>' . $row['uprate'] . '</td>'
                           .     '<td>' . $row['downrate'] . '</td>'
                           .     '<td><a class="badge badge-light" href="graph.php?id=' . $row['id'] . '">graph</a></td>'
-                          .     '<td><a class="badge badge-danger" href="delete_graph.php?id=' . $row['id'] . '">delete</a></td>'
+                          .     '<td>'
+                          .       '<a class="badge badge-danger" href="delete_graph.php?id=' . $row['id'] . '&name=' . $row['name'] . '">'
+                          .         'delete</a></td>'
                           .   '</tr>';
                         /*echo  '<li class="list-group-item d-flex justify-content-between lh-condensed">' 
                           .     '<div>'

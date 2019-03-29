@@ -27,57 +27,37 @@
     <!-- <script src="cytoscape/js/code.js"></script>   -->
 
     <?php
+      $contractId = $_GET["id"];
+      $contractName = $_GET["name"];
 
-      $servername = "127.0.0.1";
-      $username = "root";
-      $password = "";
-      $dbname = "vocabulary-store";
+      $endpoint = "http://117.17.102.171:8080/servlet/REST?myparam=" . $contractName . "";
 
-      $nodesToDraw = "";
-      $nodeLinksToDrawHelper = "";
-      $nodeLinksToDraw = "";
+      $curl = curl_init($endpoint);
 
-      // Create connection
-      $conn2 = new mysqli($servername, $username, $password, $dbname);
+      $result = curl_exec($curl);
 
-      // Check connection
-      if($conn2->connect_error) {
-          die("Connection failed: " . $conn2->connect_error);
+      if($result){
+        header('Location: contracts.php');
       }
       else{
-        $contractId = $_GET["id"];
-
-        if(isset($_GET["id"])){
-          $ctr = 0;
-          
-          $sql =  "DELETE FROM `xontracts` WHERE `id`='" . $contractId . "'";
-          
-          $result = $conn2->query($sql);
-
-          if ($result === TRUE) {
-            //echo "Record deleted successfully";
-            header('Location: contracts.php');
-          } else{
-            echo  '<div class="container">'
-                .   '<div class="row">' 
-                .     '<div class="col-md-10 offset-1">'
-                .       '<div class="alert alert-danger" role="alert" style="margin-top: 100px;">'
-              .         '<h4 class="alert-heading"><i class="fa fa-exclamation-circle"></i> Error</h4>'
-              .         '<ul><li>' 
-              .           $conn2->error
-              .         '</li></ul>'
-              .         '<hr>'
-              .         '<p class="mb-0">' 
-              .           '<ul><a href="contracts.php" class="alert-link">' 
-              .             '<i class="fa fa-arrow-circle-left"></i> Go back' 
-              .           '</a></ul>' 
-              .         '</p>'
-              .       '</div>'
-              .     '</div>'
-              .   '</div>'
-              . '</div>';
-          }
-        }
+        echo  '<div class="container">'
+          .     '<div class="row">' 
+          .       '<div class="col-md-10 offset-1">'
+          .         '<div class="alert alert-danger" role="alert" style="margin-top: 100px;">'
+          .           '<h4 class="alert-heading"><i class="fa fa-exclamation-circle"></i> Error</h4>'
+          .           '<ul>'
+          .             '<li>' . 'Could not delete the contract. Please try again' . '</li>'
+          .           '</ul>'
+          .           '<hr>'
+          .           '<p class="mb-0">' 
+          .             '<ul><a href="contracts.php" class="alert-link">' 
+          .               '<i class="fa fa-arrow-circle-left"></i> Go back' 
+          .             '</a></ul>' 
+          .           '</p>'
+          .         '</div>'
+          .       '</div>'
+          .     '</div>'
+          .   '</div>';
       }
     ?>
 
