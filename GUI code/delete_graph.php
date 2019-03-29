@@ -30,7 +30,7 @@
       $contractId = $_GET["id"];
       $contractName = $_GET["name"];
 
-      $endpoint = "http://117.17.102.171:8080/servlet/REST?myparam=" . $contractName . "";
+      $endpoint = "http://117.17.102.171:8080/servlet/REST?myparam=" . $contractName . "&id=" . $contractId;
 
       $curl = curl_init($endpoint);
 
