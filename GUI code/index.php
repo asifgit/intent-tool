@@ -88,7 +88,7 @@
                   .   '</h4>';
               }
 
-              $sql =  "SELECT cont.`id`, cont.`name`, cont.`arch_id`, cont.`s_nssai`, cont.`uprate`, cont.`downrate`, cont.`unit`, arch.`architecture_name` " 
+              $sql =  "SELECT cont.`id`, cont.`name`, cont.`arch_id`, cont.`s_nssai`, cont.`uprate`, cont.`downrate`, cont.`unit`, arch.`architecture_name`, cont.`is_synced` " 
                     . "FROM `xontracts` AS cont "
                     . "INNER JOIN architectures_supported AS arch ON cont.`arch_id` = arch.`id` " 
                     . "ORDER BY cont.`id`";
@@ -99,6 +99,9 @@
               if ($result2->num_rows > 0) {
                   // output data of each row
                   while($row = $result2->fetch_assoc()) {
+                      $iconClass = ($row['is_synced']==1?'fa-check-square text-success':'fa-refresh text-warning');
+                      $iconTitle = ($row['is_synced']==1?'synced':'to be synced');
+
                       echo  '<li class="list-group-item d-flex justify-content-between lh-condensed">' 
                         .     '<div>'
                         .       '<h6 class="my-0"><a href="graph.php?id=' . $row['id'] . '">' . $row['name'] . ' (' . $row['architecture_name'] . ')</a></h6>' 
@@ -109,7 +112,7 @@
                         .       '</small>' 
                         .     '</div>' 
                         .     '<span class="text-muted">' 
-                        .       '<i class="fa fa-check-square fa-lg text-success"></i>' 
+                        .       '<i class="fa fa-lg ' . $iconClass . '" title="' . $iconTitle . '"></i>' 
                         .     '</span>' 
                         .   '</li>';
                       //echo "id: " . $row["id"]. " - Name: " . $row["firstname"]. " " . $row["lastname"]. "<br>";

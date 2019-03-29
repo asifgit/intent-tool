@@ -59,6 +59,7 @@
               <th scope="col">S-NSSAI</th>
               <th scope="col">Uprate</th>
               <th scope="col">Downrate</th>
+              <th scope="col">Status</th>
               <th scope="col">View</th>
               <th scope="col">Action</th>
             </tr>
@@ -82,7 +83,7 @@
                 $sql =  "SELECT COUNT(*) AS number_of_contracts FROM `xontracts` ";
                 $result1 = $conn->query($sql);
 
-                $sql =  "SELECT cont.`id`, cont.`name`, cont.`arch_id`, cont.`s_nssai`, cont.`uprate`, cont.`downrate`, cont.`unit`, arch.`architecture_name` " 
+                $sql =  "SELECT cont.`id`, cont.`name`, cont.`arch_id`, cont.`s_nssai`, cont.`uprate`, cont.`downrate`, cont.`unit`, arch.`architecture_name`, cont.`is_synced` " 
                       . "FROM `xontracts` AS cont "
                       . "INNER JOIN architectures_supported AS arch ON cont.`arch_id` = arch.`id` " 
                       . "ORDER BY cont.`id`";
@@ -92,12 +93,17 @@
                     // output data of each row
                     $ijk = 0;
                     while($row = $result2->fetch_assoc()) {
+                        $iconClass = ($row['is_synced']==1?'fa-check-square text-success':'fa-refresh text-warning');
+                        $iconTitle = ($row['is_synced']==1?'synced':'to be synced');
                         echo  '<tr>'
                           .     '<th scope="row">' . ++$ijk . '</th>'
                           .     '<td class="text-left">' . $row['name'] . '</td>'
                           .     '<td>' . (($row['s_nssai']==127)?"Custom":$row['s_nssai']) . '</td>'
                           .     '<td>' . $row['uprate'] . '</td>'
                           .     '<td>' . $row['downrate'] . '</td>'
+                          .     '<td>' 
+                          .       '<i class="fa fa-sm ' . $iconClass . '" title="' . $iconTitle . '"></i>'
+                          .     '</td>'
                           .     '<td><a class="badge badge-light" href="graph.php?id=' . $row['id'] . '">graph</a></td>'
                           .     '<td>'
                           .       '<a class="badge badge-danger" href="delete_graph.php?id=' . $row['id'] . '&name=' . $row['name'] . '">'
