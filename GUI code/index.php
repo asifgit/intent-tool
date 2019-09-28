@@ -135,6 +135,19 @@
           <h4 class="mb-3">Contract Information</h4>
           <form class="needs-validation" novalidate="" action="post_contract.php" method="POST">
             <div class="row">
+              <div class="col-md-12 mb-6">
+                <label for="orchestrator">Orchestrator</label>
+                <select class="custom-select d-block w-100" id="orchestrator" name="orchestrator" required="">
+                  <option value="">Select...</option>
+                  <option value="1">M-CORD</option>
+                  <option value="2">OSM</option>
+                </select>
+                <div class="invalid-feedback">
+                  Please select an orchestrator.
+                </div>
+              </div>
+            </div>
+            <div class="row">
               <div class="col-md-7 mb-3">
                 <label for="name">Contract name</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="xyz" required="">
